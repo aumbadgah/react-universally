@@ -525,6 +525,7 @@ export default function webpackConfigFactory(buildOptions) {
               )}`
                   : // Otherwise we just use the configured web path for the client.
                   config('bundles.client.webPath'),
+                // config('basePath') + config('bundles.client.webPath'),
                 // We only emit files when building a web bundle, for the server
                 // bundle we only care about the file loader being able to create
                 // the correct asset URLs.

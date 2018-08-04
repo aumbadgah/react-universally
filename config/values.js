@@ -24,7 +24,50 @@ const values = {
     polyfillIO: true,
     // We need to expose all the htmlPage settings.
     htmlPage: true,
+
+    basePath: true,
+    api: {
+      paths: true,
+    },
   },
+
+  api: {
+    // Only allow mock authenticated user when NOT in production
+    // Default to ON, when in development
+    mockAuth:
+      EnvVars.string('NODE_ENV', 'development') !== 'production' && EnvVars.bool('MOCK_AUTH', true),
+    paths: {
+      auth: {
+        isAuthenticated: '/auth',
+        loginFacebook: '/auth/facebook',
+        loginFacebookCallback: '/auth/facebook/return',
+        logout: '/auth/logout',
+      },
+    },
+    routers: {
+      auth: {
+        basePath: '/auth',
+        routes: {
+          isAuthenticated: '/',
+          loginFacebook: '/facebook',
+          loginFacebookCallback: '/facebook/return',
+          logout: '/logout',
+        },
+      },
+    },
+  },
+
+  baseUrl: EnvVars.string('BASE_URL', ''),
+  basePath: EnvVars.string('BASE_PATH', '/'),
+
+  passport: {
+    facebook: {
+      clientID: EnvVars.string('FACEBOOK_CLIENT_ID', '12345'),
+      clientSecret: EnvVars.string('FACEBOOK_CLIENT_SECRET', '12345'),
+    },
+  },
+
+  sessionSecret: EnvVars.string('SESSION_SECRET', 'my session secret'),
 
   // The host on which the server should run.
   host: EnvVars.string('HOST', '0.0.0.0'),
@@ -151,6 +194,10 @@ const values = {
       // assets.
       './**/*',
     ],
+    excludePublicAssets: [
+      // Exclude all public asset paths that include one of the values listed here
+      'favicon',
+    ],
     // Offline page file name.
     offlinePageFileName: 'offline.html',
   },
@@ -171,10 +218,12 @@ const values = {
       ],
 
       // Where does the client bundle output live?
-      outputPath: './build/client',
+      outputPath: './build/client/',
+
+      path: '/client',
 
       // What is the public http path at which we must serve the bundle from?
-      webPath: '/client/',
+      webPath: `${EnvVars.string('BASE_PATH', '')}/client/`,
 
       // Configuration settings for the development vendor DLL.  This will be created
       // by our development server and provides an improved dev experience

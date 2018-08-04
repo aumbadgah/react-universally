@@ -5,11 +5,14 @@ import { render } from 'react-dom';
 import BrowserRouter from 'react-router-dom/BrowserRouter';
 import asyncBootstrapper from 'react-async-bootstrapper';
 import { AsyncComponentProvider } from 'react-async-component';
+import url from 'url';
 
 import './polyfills';
 
 import ReactHotLoader from './components/ReactHotLoader';
-import DemoApp from '../shared/components/DemoApp';
+import App from '../shared/components/App';
+
+import config from '../config';
 
 // Get the DOM Element that will host our React application.
 const container = document.querySelector('#app');
@@ -32,7 +35,10 @@ function renderApp(TheApp) {
   const app = (
     <ReactHotLoader>
       <AsyncComponentProvider rehydrateState={asyncComponentsRehydrateState}>
-        <BrowserRouter forceRefresh={!supportsHistory}>
+        <BrowserRouter
+          basename={url.parse(config('basePath')).pathname || '/'}
+          forceRefresh={!supportsHistory}
+        >
           <TheApp />
         </BrowserRouter>
       </AsyncComponentProvider>
@@ -46,7 +52,7 @@ function renderApp(TheApp) {
 }
 
 // Execute the first render of our app.
-renderApp(DemoApp);
+renderApp(App);
 
 // This registers our service worker for asset caching and offline support.
 // Keep this as the last item, just in case the code execution failed (thanks
@@ -58,7 +64,7 @@ if (process.env.BUILD_FLAG_IS_DEV === 'true' && module.hot) {
   // Accept changes to this file for hot reloading.
   module.hot.accept('./index.js');
   // Any changes to our App will cause a hotload re-render.
-  module.hot.accept('../shared/components/DemoApp', () => {
-    renderApp(require('../shared/components/DemoApp').default);
+  module.hot.accept('../shared/components/App', () => {
+    renderApp(require('../shared/components/App').default);
   });
 }

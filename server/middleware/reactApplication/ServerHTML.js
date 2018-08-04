@@ -28,12 +28,25 @@ function KeyedComponent({ children }) {
 const clientEntryAssets = getClientBundleEntryAssets();
 
 function stylesheetTag(stylesheetFilePath) {
+  // function stylesheetTag(stylesheetFilePath, prependbasePath) {
+  //   const path = prependbasePath
+  //     ? config('basePath') + stylesheetFilePath
+  //     : stylesheetFilePath;
+
   return (
     <link href={stylesheetFilePath} media="screen, projection" rel="stylesheet" type="text/css" />
+    // <link href={path} media="screen, projection" rel="stylesheet" type="text/css" />
   );
 }
 
 function scriptTag(jsFilePath) {
+  // function scriptTag(jsFilePath, prependbasePath = false) {
+  //   const path = prependbasePath
+  //     ? config('basePath') + jsFilePath
+  //     : jsFilePath;
+
+  //   return <script type="text/javascript" src={path} />;
+
   return <script type="text/javascript" src={jsFilePath} />;
 }
 
@@ -43,8 +56,9 @@ function ServerHTML(props) {
   const { asyncComponentsState, helmet, nonce, reactAppString } = props;
 
   // Creates an inline script definition that is protected by the nonce.
-  const inlineScript = body =>
-    <script nonce={nonce} type="text/javascript" dangerouslySetInnerHTML={{ __html: body }} />;
+  const inlineScript = body => (
+    <script nonce={nonce} type="text/javascript" dangerouslySetInnerHTML={{ __html: body }} />
+  );
 
   const headerElements = removeNil([
     ...ifElse(helmet)(() => helmet.meta.toComponent(), []),
@@ -52,6 +66,7 @@ function ServerHTML(props) {
     ...ifElse(helmet)(() => helmet.base.toComponent(), []),
     ...ifElse(helmet)(() => helmet.link.toComponent(), []),
     ifElse(clientEntryAssets && clientEntryAssets.css)(() => stylesheetTag(clientEntryAssets.css)),
+    // ifElse(clientEntryAssets && clientEntryAssets.css)(() => stylesheetTag(clientEntryAssets.css, true)),
     ...ifElse(helmet)(() => helmet.style.toComponent(), []),
   ]);
 
@@ -88,22 +103,17 @@ function ServerHTML(props) {
       ),
     ),
     ifElse(clientEntryAssets && clientEntryAssets.js)(() => scriptTag(clientEntryAssets.js)),
+    // ifElse(clientEntryAssets && clientEntryAssets.js)(() => scriptTag(clientEntryAssets.js, true)),
     ...ifElse(helmet)(() => helmet.script.toComponent(), []),
   ]);
 
   return (
     <HTML
       htmlAttributes={ifElse(helmet)(() => helmet.htmlAttributes.toComponent(), null)}
-      headerElements={headerElements.map((x, idx) =>
-        (<KeyedComponent key={idx}>
-          {x}
-        </KeyedComponent>),
-      )}
-      bodyElements={bodyElements.map((x, idx) =>
-        (<KeyedComponent key={idx}>
-          {x}
-        </KeyedComponent>),
-      )}
+      headerElements={headerElements.map((x, idx) => (
+        <KeyedComponent key={idx}>{x}</KeyedComponent>
+      ))}
+      bodyElements={bodyElements.map((x, idx) => <KeyedComponent key={idx}>{x}</KeyedComponent>)}
       appBodyString={reactAppString}
     />
   );
