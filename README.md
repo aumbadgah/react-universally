@@ -42,8 +42,8 @@ This template provides more flexible path configuration options, as well as Pass
 ## Getting Started
 
 ```bash
-git clone https://github.com/ctrlplusb/react-universally
-cd my-project
+git clone https://github.com/aumbadgah/react-universally-fb-oauth.git
+cd react-universally-fb-oauth
 npm install
 npm run develop
 ```

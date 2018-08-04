@@ -8,6 +8,15 @@
   "commit": true,
   "contributors": [
     {
+      "login": "aumbadgah",
+      "name": "Antti Suoninen",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/8255871?v=3",
+      "profile": "https://github.com/aumbadgah",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
       "login": "aoc",
       "name": "Andrés Calabrese",
       "avatar_url": "https://avatars3.githubusercontent.com/u/243161?v=3",
