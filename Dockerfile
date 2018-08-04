@@ -1,6 +1,6 @@
 FROM node:8-alpine
 
-WORKDIR /notes
+WORKDIR /my_app
 
 COPY .babelrc .
 COPY .modernizrrc .
