@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'react-router-dom/Link';
 
-import LoginLink from '../../../LoginLlink';
-import LogoutLink from '../../../LogoutLink';
+import LoginLink from '../LoginLink';
+import LogoutLink from '../LogoutLink';
 
 const Menu = props => (
   <ul style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#c6c6c6' }}>
